@@ -17,16 +17,12 @@ public class IdleState : MonoBehaviour
 }
 
 
-
-
-
-//攻击状态 
+ 
 public class Att : Istate
 {
     public FSM message;
     public EmenyAttribute attribute;
 
-   
 
 
     public Att(FSM fsm)
@@ -39,10 +35,6 @@ public class Att : Istate
 
     public void OnEnter()
     {
-        //调整方法，发射子弹
-        //自动的去发射子弹，一个携程
-
-        message.Att();
 
     }
 
@@ -87,13 +79,6 @@ public class Track : Istate
     public void OnEnter()
     {
 
-        attribute.AIpath2D.canMove = true;
-
-        attribute.aIDestinationSetter.target = PlayerManger.instance.player.transform;
-
-
-        message.Att();
-
     }
 
     public void OnExit()
@@ -101,11 +86,8 @@ public class Track : Istate
        // throw new System.NotImplementedException();
     }
 
-
-
     public void OnUpdate() {
 
-    
     }
 
 
@@ -135,31 +117,17 @@ public class Search : Istate
     public void OnEnter()
     {
 
-        attribute.AIpath2D.canMove = false;
-
-      
-
     }
 
     public void OnExit()
     {
-        // throw new System.NotImplementedException();
+       
     }
 
 
 
     public void OnUpdate()
     {
-
-
-        float dis = Vector3.Distance(PlayerManger.instance.player.transform.position,message.transform.position);
-
-        if (dis < attribute.rangeOffset) {
-
-            message.TransitionState(StateType.Track);
-        
-        }
-
 
     }
 
