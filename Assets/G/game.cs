@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Attribute{
 
-     string itemId;
+    string itemId;
     string unionId;
     Event unionEvent;
 
@@ -17,7 +17,7 @@ public class game : MonoBehaviour
     string unionId;
 
     string nodeId;
-
+    Vector3 position;
     string connectNodeId;
 
     Event unionEvent;
@@ -25,12 +25,10 @@ public class game : MonoBehaviour
     //接下来要写一个碰撞的事件，还是说射线检测呢，拖拽融合的基本逻辑
 
 
-    //相机的逻辑
+    // 相机的逻辑
     // thisItem, coverItem
     // 等一下咋操作 点击相机，就是相机生成的第一个点  喀  拖动，改变第二个点的位置 ，一条实时生成的线条，涉嫌检测，图层 嚓
-
-
-
+    // 
 
     public void Unit(){
         unionEvent.event();
@@ -94,6 +92,8 @@ public class TypewriterEffect : MonoBehaviour
     private Text textObject;
 
 
+    private string textGroup;
+
     private int readIdx;
 
     //停止协程
@@ -119,6 +119,9 @@ public class TypewriterEffect : MonoBehaviour
         //接下来要阅读的文本
         fullText=fullText.Substring(readIdx,fullText.length-1);
 
+        //接下来就是算时间了，不进行清空
+        //我需要计算好，不能用DoTewwn了 ‘相机’ 
+
 
     }
 
@@ -129,13 +132,47 @@ public class TypewriterEffect : MonoBehaviour
 
         while(readIdx<fullText.Length){
             currentText = fullText.Substring(0, readIdx);
+            bool isGroup;
+
+           
+            string a = fullText.Substring(readIdx-1, readIdx)
+
+            if(a.equals("‘")){
+                //特殊词汇的组词开始
+               int startGroupIdx=readIdx; 
+            }
+
+             if(a.equals("’")){
+                //特殊词汇的组词开始
+               int endGroupIdx=readIdx; 
+            }
+
+
+            if(currentText.Constant("‘’")){
+               string textGroup=fullText.Substring(startGroupIdx, endGroupIdx); 
+            }
+
+
             readIdx++;
              textObject.text = currentText;
-        yield return new WaitForSeconds(delay);
+           yield return new WaitForSeconds(delay);
 
         }
        
     }
+    
+    //创造词组的预制体
+    void createGroup(string textGroup){
+
+        if(textGroup.equals("相机")){
+            //
+
+        }
+
+
+    }
+
+    //要考虑生成的位置，对象池
 
     
 }
