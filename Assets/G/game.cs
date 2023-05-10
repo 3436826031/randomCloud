@@ -86,6 +86,7 @@ using UnityEngine.UI;
 
 public class TypewriterEffect : MonoBehaviour
 {
+    [MyRangeAttribute(0,1f,"文字显示的速度")]
     public float delay = 0.1f;
     private string fullText="测试信息";
     private string currentText = "";
@@ -165,7 +166,7 @@ public class TypewriterEffect : MonoBehaviour
     void createGroup(string textGroup){
 
         if(textGroup.equals("相机")){
-            //
+            // 好像复杂很多，比我想得
 
         }
 
