@@ -2,25 +2,91 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attribute{
+public class LinkAttribute{
 
-    string itemId;
-    string unionId;
-    Event unionEvent;
+    public LinkAttribute linkAttribute;
+    public  string itemId;
+    public string unionId;
 
+    public string nodeId;
+
+    public  Event unionEvent;
+
+    public LinkAttribute(){
+        linkAttribute=new  LinkAttribute(); 
+        return linkAttribute;
+    }
+
+
+   
+
+    public LinkAttribute setItemId(string itemId){
+        this.itemId=itemId;
+        return linkAttribute;
+    }
+
+ 
+    public LinkAttribute setUnionId(string unionId){
+        this.unionId=unionId;
+        return linkAttribute;
+    }
+
+   
+   public LinkAttribute setNodeId(string nodeId){
+        this.nodeId=nodeId;
+        return linkAttribute;
+    }
+
+  
+ public LinkAttribute setUnionEvent(Event unionEvent){
+        this.unionEvent=unionEvent;
+        return linkAttribute;
+    }
+
+     
+
+}
+public class ItemAttribute{
+
+     public  Vector3 position;
+     public string  word;
+     public Color color;
+
+      public ItemAttribute itemAttribute;
+
+    public ItemAttribute(){
+            itemAttribute=new  ItemAttribute(); 
+            return itemAttribute;
+        }
+
+ public ItemAttribute setPosition(Vector3 position){
+        this.position=position;
+        return itemAttribute;
+    }
+
+ public ItemAttribute setWord(string word){
+        this.word=word;
+        return itemAttribute;
+    }
+ 
+ public ItemAttribute setColor(Color color){
+        this.color=color;
+        return itemAttribute;
+    }
 }
 
 
-public class game : MonoBehaviour
+public class WordItem : MonoBehaviour
 {
-    string itemId;
-    string unionId;
 
-    string nodeId;
-    Vector3 position;
-    string connectNodeId;
+    public Text text;
+    
+    public LinkAttribute linkAttribute;
 
-    Event unionEvent;
+    public ItemAttribute itemAttribute;
+
+
+   
 
     //接下来要写一个碰撞的事件，还是说射线检测呢，拖拽融合的基本逻辑
 
@@ -34,11 +100,31 @@ public class game : MonoBehaviour
         unionEvent.event();
     }
 
-    void flushShow(){
-
-
+    public void flushShow(){
 
     }
+
+
+    /**初始化 */
+    public void init(ItemAttribute itemAttribute,LinkAttribute linkAttribute){
+        if(itemAttribute!=null){
+            this.itemAttribute=itemAttribute;
+            transform.position=itemAttribute.position;
+            text.text=itemAttribute.word;
+        }
+
+        if(linkAttribute!=null){
+           this.linkAttribute=linkAttribute;
+        }
+       
+       
+
+       
+    }
+
+
+
+
 
 }
 
@@ -92,6 +178,7 @@ public class TypewriterEffect : MonoBehaviour
     private string currentText = "";
     private Text textObject;
 
+    public GameObject wordItemPre;
 
     private string textGroup;
 
@@ -110,11 +197,11 @@ public class TypewriterEffect : MonoBehaviour
         textObject = GetComponent<Text>();
         fullText = textObject.text;
         textObject.text = "";
-        StartCoroutine(ShowText());
+     //   StartCoroutine(ShowText());
     }
 
     
-    void HadeUp(){
+    public  void HadeUp(){
 
         StopCoroutine(ShowText());
         //接下来要阅读的文本
@@ -126,6 +213,11 @@ public class TypewriterEffect : MonoBehaviour
 
     }
 
+
+
+    public void HadeDown(){
+         StartCoroutine(ShowText());
+    }
 
     IEnumerator ShowText()
     {
@@ -151,6 +243,7 @@ public class TypewriterEffect : MonoBehaviour
 
             if(currentText.Constant("‘’")){
                string textGroup=fullText.Substring(startGroupIdx, endGroupIdx); 
+               createGroup(textGroup);
             }
 
 
@@ -166,8 +259,11 @@ public class TypewriterEffect : MonoBehaviour
     void createGroup(string textGroup){
 
         if(textGroup.equals("相机")){
-            // 好像复杂很多，比我想得
+            // 好像复杂很多，直接生成一个新的预制体，然后赋值
+        LinkAttribute linkAtt=new LinkAttribute().setItemId().setNodeId().setUnionId();
+        ItemAttribute itemAtt=new ItemAttribute().setPosition()
 
+        PrefabFactory.createTextPrefab(wordItemPre,itemAtt,linkAtt);
         }
 
 
@@ -176,4 +272,27 @@ public class TypewriterEffect : MonoBehaviour
     //要考虑生成的位置，对象池
 
     
+}
+
+
+public class PrefabFactory{
+
+    //写一个单例
+
+
+    void Start(){
+
+
+    }
+
+
+
+    public static GameObject createTextPrefab(GameObject gm,ItemAttribute itemAttribute,LinkAttribute linkAttribute){
+
+     GameObject pre=  Instantiate(prefab);
+     WordItem wi= pre.GetComponent<WordItem>();
+     wi.init(itemAttribute,linkAttribute);    
+    return pre;
+    }
+
 }
